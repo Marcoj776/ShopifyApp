@@ -1,7 +1,7 @@
 # Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
 
 client_id = "8ae5da528e7f163ed3ffbe5e84b20711"
-application_url = "https://infected-oklahoma-kenny-fan.trycloudflare.com"
+application_url = "https://crm-rail-teddy-extraction.trycloudflare.com"
 embedded = true
 name = "demo"
 handle = "demo-1677"
@@ -23,13 +23,13 @@ api_version = "2025-01"
 
 [access_scopes]
 # Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
-scopes = "write_products"
+scopes = "write_products,read_orders"
 
 [auth]
 redirect_urls = [
-  "https://infected-oklahoma-kenny-fan.trycloudflare.com/auth/callback",
-  "https://infected-oklahoma-kenny-fan.trycloudflare.com/auth/shopify/callback",
-  "https://infected-oklahoma-kenny-fan.trycloudflare.com/api/auth/callback"
+  "https://crm-rail-teddy-extraction.trycloudflare.com/auth/callback",
+  "https://crm-rail-teddy-extraction.trycloudflare.com/auth/shopify/callback",
+  "https://crm-rail-teddy-extraction.trycloudflare.com/api/auth/callback"
 ]
 
 [pos]

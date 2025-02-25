@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node'
-import { useFetcher } from '@remix-run/react'
+import { json, useFetcher } from '@remix-run/react'
 import {
   Page,
   Layout,
@@ -50,11 +50,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
   const responseJson = await response.json()
 
-  const orders = responseJson.data!.orders! as Orders
+  const { orders } = responseJson.data! as Orders
 
-  return {
-    orders
-  }
+  return { orders }
 }
 
 
@@ -65,7 +63,7 @@ export default function Index() {
   const isLoading =
     ['loading', 'submitting'].includes(fetcher.state) &&
     fetcher.formMethod === 'POST'
-  const { orders } = fetcher.data?.orders || {}
+  const { orders } = fetcher.data || {}
 
   useEffect(() => {
     if (orders) {
@@ -112,17 +110,21 @@ export default function Index() {
                     </List.Item>
                   </List>
                 </BlockStack>
-                <InlineStack gap='300'>
+                <BlockStack>
                   <Button loading={isLoading} onClick={getOrders}>
                     Fetch orders
                   </Button>
-                  {fetcher.data?.orders && (
-                    orders?.edges.map(({ node }) => (
-                      <Box key={node.id}>
-                        <Text as='span'>{node.id}</Text>
-                        <Text as='span'>{node.updatedAt}</Text>
-                      </Box>
-                    ))
+                </BlockStack>
+                <InlineStack>
+                  {orders && (
+                    <List>
+                      {orders?.edges.map(({ node }, i) => (
+                        <Card key={i}>
+                          <Text as='p'><b>Product ID:</b> {node.id}</Text>
+                          <Text as='p'><b>Last Updated:</b> {node.updatedAt}</Text>
+                        </Card>
+                      ))}
+                    </List>
                   )}
                 </InlineStack>
               </BlockStack>
