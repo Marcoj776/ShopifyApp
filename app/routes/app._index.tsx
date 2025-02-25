@@ -1,6 +1,9 @@
-import { useEffect } from 'react'
+import {
+  useEffect,
+  // useCallback, useState
+} from 'react'
 import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node'
-import { json, useFetcher } from '@remix-run/react'
+import { useFetcher } from '@remix-run/react'
 import {
   Page,
   Layout,
@@ -8,9 +11,10 @@ import {
   Card,
   Button,
   BlockStack,
-  Box,
   List,
   InlineStack,
+  DataTable,
+  // TextField,
 } from '@shopify/polaris'
 import { TitleBar, useAppBridge } from '@shopify/app-bridge-react'
 import { authenticate } from '../shopify.server'
@@ -23,12 +27,32 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
 interface Orders {
   orders: {
-    edges: {
-      node: {
-        id: string
-        updatedAt: string
-      }
-    }[]
+    edges: Array<{
+      node: Order
+    }>
+  }
+}
+
+interface Order {
+  id: string
+  updatedAt: string
+  lineItems: {
+    edges: Array<{
+      node: LineItem
+    }>
+  }
+  customer: {
+    firstName: string
+  }
+}
+
+interface LineItem {
+  quantity: number
+  variant: {
+    product: {
+      id: string
+      title: string
+    }
   }
 }
 
@@ -36,16 +60,32 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const { admin } = await authenticate.admin(request)
   const response = await admin.graphql(
     `#graphql
-  query {
-    orders(first: 10, query: "updated_at:>2025-02-01") {
-      edges {
-        node {
-          id
-          updatedAt
+    {
+      orders(first: 10, query: "updated_at:>2025-02-01") {
+        edges {
+          node {
+            id
+            updatedAt
+            lineItems(first: 20) {
+              edges {
+                node {
+                  quantity
+                  variant {
+                    product {
+                      id
+                      title
+                    }
+                  }
+                }
+              }
+            }
+            customer {
+              firstName
+            }
+          }
         }
       }
-    }
-  }`,
+    }`,
   )
 
   const responseJson = await response.json()
@@ -54,7 +94,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
   return { orders }
 }
-
 
 export default function Index() {
   const fetcher = useFetcher<typeof action>()
@@ -71,6 +110,23 @@ export default function Index() {
     }
   }, [orders, shopify])
   const getOrders = () => fetcher.submit({}, { method: 'POST' })
+  const rows = orders?.edges.map(({ node }) => [
+    node.id.replace(
+      'gid://shopify/Order/',
+      '',
+    ),
+    new Date(node.updatedAt).toLocaleDateString('en-GB'),
+    node.customer.firstName,
+    node.lineItems.edges[0].node.variant.product.id.replace('gid://shopify/Product/', ''),
+    node.lineItems.edges[0].node.variant.product.title,
+    node.lineItems.edges[0].node.quantity,
+  ]) || []
+
+  // const [value, setValue] = useState('10050191753562')
+  // const handleChange = useCallback(
+  //   (newValue: string) => setValue(newValue),
+  //   [],
+  // )
 
   return (
     <Page>
@@ -104,29 +160,47 @@ export default function Index() {
                       <Text as='span' variant='bodyMd'>
                         <b>GraphQL Requirements</b>: Use GraphQL queries to
                         fetch orders. Include at least the following data for
-                        each order: Order ID Customer name Product details (ID,
+                        each order: Order ID, Customer name, Product details (ID,
                         title, quantity).
                       </Text>
                     </List.Item>
                   </List>
                 </BlockStack>
-                <BlockStack>
+                <InlineStack>
                   <Button loading={isLoading} onClick={getOrders}>
                     Fetch orders
                   </Button>
-                </BlockStack>
-                <InlineStack>
-                  {orders && (
-                    <List>
-                      {orders?.edges.map(({ node }, i) => (
-                        <Card key={i}>
-                          <Text as='p'><b>Product ID:</b> {node.id}</Text>
-                          <Text as='p'><b>Last Updated:</b> {node.updatedAt}</Text>
-                        </Card>
-                      ))}
-                    </List>
-                  )}
+                  {/* <TextField
+                    label="Order Id"
+                    value={value}
+                    onChange={handleChange}
+                    autoComplete="off"
+                    type='number'
+                  /> */}
                 </InlineStack>
+                {orders && (
+                  <Card>
+                    <DataTable
+                      columnContentTypes={[
+                        'numeric',
+                        'text',
+                        'text',
+                        'text',
+                        'text',
+                        'text',
+                      ]}
+                      headings={[
+                        'Order Id',
+                        'Last Updated',
+                        'Customer Name',
+                        'Product ID',
+                        'Product Title',
+                        'Quantity',
+                      ]}
+                      rows={rows}
+                    />
+                  </Card>
+                )}
               </BlockStack>
             </Card>
           </Layout.Section>
