@@ -24,7 +24,7 @@ export default function App() {
 				<Link to='/app' rel='home'>
 					Home
 				</Link>
-				<Link to='/app/additional'>Additional page</Link>
+				<Link to='/app/question3'>Question 3: Webhooks</Link>
 			</NavMenu>
 			<Outlet />
 		</AppProvider>
