@@ -120,7 +120,7 @@ export default function Index() {
     node.lineItems.edges[0].node.variant.product.id.replace('gid://shopify/Product/', ''),
     node.lineItems.edges[0].node.variant.product.title,
     node.lineItems.edges[0].node.quantity,
-  ]) || []
+  ]).filter(row => row[3] == '10050191753562') || []
 
   // const [value, setValue] = useState('10050191753562')
   // const handleChange = useCallback(
@@ -153,7 +153,7 @@ export default function Index() {
                       <Text as='span' variant='bodyMd'>
                         <b>Use Default Data</b>: Choose one of the default
                         product IDs from your development store to filter
-                        orders.
+                        orders. (10050191753562)
                       </Text>
                     </List.Item>
                     <List.Item>
