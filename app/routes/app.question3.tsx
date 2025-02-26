@@ -5,10 +5,78 @@ import {
 	Page,
 	Text,
 	BlockStack,
+	Button,
 } from '@shopify/polaris'
-import { TitleBar } from '@shopify/app-bridge-react'
+import { TitleBar, useAppBridge } from '@shopify/app-bridge-react'
+import { authenticate } from 'app/shopify.server'
+import type { ActionFunctionArgs } from '@remix-run/node'
+import { useFetcher } from '@remix-run/react'
+import { useEffect } from 'react'
+
+
+export const action = async ({ request }: ActionFunctionArgs) => {
+	if (request.method !== "POST") {
+		return new Response(JSON.stringify({ error: "Method not allowed" }), { status: 405 }).json()
+	}
+
+	try {
+		const { admin } = await authenticate.admin(request)
+		const response = await admin.graphql(
+			`#graphql
+				mutation WebhookSubscriptionCreate($topic: WebhookSubscriptionTopic!, $webhookSubscription: WebhookSubscriptionInput!) {
+					webhookSubscriptionCreate(topic: $topic, webhookSubscription: $webhookSubscription) {
+						webhookSubscription {
+							id
+							topic
+							apiVersion {
+								handle
+							}
+							format
+							createdAt
+						}
+						userErrors {
+							field
+							message
+						}
+					}
+				}`,
+			{
+				variables: {
+					"topic": "ORDERS_CREATE",
+					"webhookSubscription": {
+						"callbackUrl": "https://admin.shopify.com/store/alumdtest/apps/webhooks",
+						"format": "JSON"
+					}
+				},
+			},
+		)
+		const data = await response.json()
+		return {
+			data
+		}
+	} catch (error) {
+		console.error("Failed to create webhook:", error)
+		return new Response(JSON.stringify({ success: false, error: (error as Error).message }), { status: 500 }).json()
+	}
+}
+
 
 export default function Question3Page() {
+	const fetcher = useFetcher<typeof action>()
+	const shopify = useAppBridge()
+	const isLoading =
+		['loading', 'submitting'].includes(fetcher.state) &&
+		fetcher.formMethod === 'POST'
+	const subscribe = () => fetcher.submit({}, { method: 'POST' })
+	const { response } = fetcher.data || {}
+	console.log(response)
+
+	useEffect(() => {
+		if (response) {
+			shopify.toast.show('Webhook created')
+		}
+	}, [response, shopify])
+
 	return (
 		<Page>
 			<TitleBar title='Question 3' />
@@ -47,6 +115,9 @@ export default function Question3Page() {
 									</Text>
 								</List.Item>
 							</List>
+							<Button loading={isLoading} onClick={subscribe}>
+								Subscribe to webhook
+							</Button>
 						</BlockStack>
 					</Card>
 				</Layout.Section>

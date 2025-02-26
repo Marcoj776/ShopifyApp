@@ -1,7 +1,7 @@
 # Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
 
 client_id = "8ae5da528e7f163ed3ffbe5e84b20711"
-application_url = "https://nightmare-ought-urgent-europe.trycloudflare.com"
+application_url = "https://potentially-designer-enable-got.trycloudflare.com"
 embedded = true
 name = "demo"
 handle = "demo-1677"
@@ -27,9 +27,9 @@ scopes = "write_products,read_orders,read_customers"
 
 [auth]
 redirect_urls = [
-  "https://nightmare-ought-urgent-europe.trycloudflare.com/auth/callback",
-  "https://nightmare-ought-urgent-europe.trycloudflare.com/auth/shopify/callback",
-  "https://nightmare-ought-urgent-europe.trycloudflare.com/api/auth/callback"
+  "https://potentially-designer-enable-got.trycloudflare.com/auth/callback",
+  "https://potentially-designer-enable-got.trycloudflare.com/auth/shopify/callback",
+  "https://potentially-designer-enable-got.trycloudflare.com/api/auth/callback"
 ]
 
 [pos]
