@@ -134,75 +134,143 @@ export default function Index() {
       <BlockStack gap='500'>
         <Layout>
           <Layout.Section>
-            <Card>
-              <BlockStack gap='500'>
+            <BlockStack gap='500'>
+              <Card>
                 <BlockStack gap='200'>
                   <Text as='h3' variant='headingMd'>
-                    Question 2: Shopify Admin API (GraphQL)
+                    Question 1: Liquid Snippet
                   </Text>
                   <List>
                     <List.Item>
                       <Text as='span' variant='bodyMd'>
-                        <b>Task</b>: Using Shopify's GraphQL Admin API, write a
-                        Node.js script in TypeScript to retrieve all orders
-                        placed within the last 30 days that contain a specific
-                        product ID.
+                        <b>Task</b>: Write a Liquid snippet to display a custom product badge ("On Sale") on the
+                        product page only when a product is discounted. Include handling for products with
+                        multiple variants where only some variants are on sale.
                       </Text>
                     </List.Item>
                     <List.Item>
                       <Text as='span' variant='bodyMd'>
-                        <b>Use Default Data</b>: Choose one of the default
-                        product IDs from your development store to filter
-                        orders. (10050191753562)
-                      </Text>
-                    </List.Item>
-                    <List.Item>
-                      <Text as='span' variant='bodyMd'>
-                        <b>GraphQL Requirements</b>: Use GraphQL queries to
-                        fetch orders. Include at least the following data for
-                        each order: Order ID, Customer name, Product details (ID,
-                        title, quantity).
+                        <b>Use Default Data</b>: Leverage the sample products in your development store, such as the
+                        “Aerodynamic Cotton Keyboard” or similar
                       </Text>
                     </List.Item>
                   </List>
                 </BlockStack>
-                <InlineStack>
-                  <Button loading={isLoading} onClick={getOrders}>
-                    Fetch orders
-                  </Button>
-                  {/* <TextField
+              </Card>
+              <Card>
+                <BlockStack gap='500'>
+                  <BlockStack gap='200'>
+                    <Text as='h3' variant='headingMd'>
+                      Question 2: Shopify Admin API (GraphQL)
+                    </Text>
+                    <List>
+                      <List.Item>
+                        <Text as='span' variant='bodyMd'>
+                          <b>Task</b>: Using Shopify's GraphQL Admin API, write a
+                          Node.js script in TypeScript to retrieve all orders
+                          placed within the last 30 days that contain a specific
+                          product ID.
+                        </Text>
+                      </List.Item>
+                      <List.Item>
+                        <Text as='span' variant='bodyMd'>
+                          <b>Use Default Data</b>: Choose one of the default
+                          product IDs from your development store to filter
+                          orders. (10050191753562)
+                        </Text>
+                      </List.Item>
+                      <List.Item>
+                        <Text as='span' variant='bodyMd'>
+                          <b>GraphQL Requirements:</b>
+                          <ul>
+                            <li>Use GraphQL queries to
+                              fetch orders. Include at least the following data for
+                              each order:
+                              <ul>
+                                <li>Order ID</li>
+                                <li>Customer name</li>
+                                <li>Product details (ID,
+                                  title, quantity)</li>
+                              </ul>
+                            </li>
+                          </ul>
+                        </Text>
+                      </List.Item>
+                    </List>
+                  </BlockStack>
+                  <InlineStack>
+                    <Button loading={isLoading} onClick={getOrders}>
+                      Fetch orders
+                    </Button>
+                    {/* <TextField
                     label="Order Id"
                     value={value}
                     onChange={handleChange}
                     autoComplete="off"
                     type='number'
                   /> */}
-                </InlineStack>
-                {orders && (
-                  <Card>
-                    <DataTable
-                      columnContentTypes={[
-                        'numeric',
-                        'text',
-                        'text',
-                        'text',
-                        'text',
-                        'text',
-                      ]}
-                      headings={[
-                        'Order Id',
-                        'Last Updated',
-                        'Customer Name',
-                        'Product ID',
-                        'Product Title',
-                        'Quantity',
-                      ]}
-                      rows={rows}
-                    />
-                  </Card>
-                )}
-              </BlockStack>
-            </Card>
+                  </InlineStack>
+                  {orders && (
+                    <Card>
+                      <DataTable
+                        columnContentTypes={[
+                          'numeric',
+                          'text',
+                          'text',
+                          'text',
+                          'text',
+                          'text',
+                        ]}
+                        headings={[
+                          'Order Id',
+                          'Last Updated',
+                          'Customer Name',
+                          'Product ID',
+                          'Product Title',
+                          'Quantity',
+                        ]}
+                        rows={rows}
+                      />
+                    </Card>
+                  )}
+                </BlockStack>
+              </Card>
+              <Card>
+                <BlockStack gap='200'>
+                  <Text as='h3' variant='headingMd'>
+                    Question 3: Shopify Webhook
+                  </Text>
+                  <List>
+                    <List.Item>
+                      <Text as='span' variant='bodyMd'>
+                        <b>Task</b>: Write a Node.js app in TypeScript to handle a Shopify webhook triggered when a
+                        product is updated. The function should:
+                        <ol>
+                          <li>Log the updated product details.</li>
+                          <li>Send an alert email if the price decreases by more than 20%.</li>
+                        </ol>
+                        <b>Use Default Data:</b>
+                        <ul>
+                          <li>Update a default product in your development store to test the webhook (e.g., reduce its price).</li>
+                        </ul>
+                        <b>GraphQL Requirements:</b>
+                        <ul>
+                          <li>Use the GraphQL Admin API to retrieve product details after receiving the webhook payload.</li>
+                          <li>Ensure the email alert contains:
+                            <ul>
+                              <li>Product title</li>
+                              <li>Old price</li>
+                              <li>New price</li>
+                              <li>Percentage decrease</li>
+                            </ul>
+                          </li>
+                        </ul>
+                      </Text>
+                    </List.Item>
+                  </List>
+                </BlockStack>
+              </Card>
+            </BlockStack>
           </Layout.Section>
         </Layout>
       </BlockStack>
