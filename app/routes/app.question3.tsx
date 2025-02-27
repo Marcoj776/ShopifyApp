@@ -5,7 +5,6 @@ import {
 	Page,
 	Text,
 	BlockStack,
-	Button,
 } from '@shopify/polaris'
 import { TitleBar, useAppBridge } from '@shopify/app-bridge-react'
 import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node'
@@ -19,6 +18,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 	await authenticate.admin(request)
 
 	try {
+		// originally planned to subscirbe to the hook via graphl from utils function
 		// const { data } = await subscribeToProductsUpdate(request)
 		return new Response()
 	} catch (error) {
@@ -89,46 +89,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 			break
 	}
 
-	/* query {
-  productVariant(id: "gid://shopify/ProductVariant/757650484644203962") {
-	id
-	title
-	sku
-	price
-	inventoryQuantity
-	product {
-	  title
-	  id
-	}
-  }
-}
-	
-		switch (topic) {
-			case 'PRODUCTS_UPDATE':
-				await admin.graphql(
-					`#graphql
-			mutation setMetafield($productId: ID!, $time: String!) {
-			  metafieldsSet(metafields: {
-				ownerId: $productId
-				namespace: "my-app",
-				key: "webhook_received_at",
-				value: $time,
-				type: "string",
-			  }) {
-				metafields {
-				  key
-				  value
-				}
-			  }
-			}
-			`,
-					{
-						variables: {
-							productId: payload.admin_graphql_api_id,
-							time: new Date().toISOString(),
-						},
-					},
-				); */
 	return new Response()
 }
 
@@ -136,10 +96,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 export default function Question3Page() {
 	const fetcher = useFetcher<typeof action>()
 	const shopify = useAppBridge()
-	const isLoading =
-		['loading', 'submitting'].includes(fetcher.state) &&
-		fetcher.formMethod === 'POST'
-	const subscribe = () => fetcher.submit({}, { method: 'POST' })
 	const { response } = fetcher.data || {}
 
 	const data = useLoaderData()
@@ -193,9 +149,6 @@ export default function Question3Page() {
 									</Text>
 								</List.Item>
 							</List>
-							<Button loading={isLoading} onClick={subscribe}>
-								Subscribe to webhook
-							</Button>
 						</BlockStack>
 					</Card>
 				</Layout.Section>
