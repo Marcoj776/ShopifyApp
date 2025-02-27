@@ -122,7 +122,7 @@ export default function Index() {
     node.lineItems.edges[0].node.variant.product.id.replace('gid://shopify/Product/', ''),
     node.lineItems.edges[0].node.variant.product.title,
     node.lineItems.edges[0].node.quantity,
-  ]) || []
+  ])//.filter(row => row[3] == '10050191753562') || []
 
   // const [value, setValue] = useState('10050191753562')
   // const handleChange = useCallback(
