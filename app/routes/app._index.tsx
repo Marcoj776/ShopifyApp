@@ -41,7 +41,7 @@ interface Order {
       node: LineItem
     }>
   }
-  customer: {
+  customer?: {
     firstName: string
   }
 }
@@ -110,17 +110,19 @@ export default function Index() {
     }
   }, [orders, shopify])
   const getOrders = () => fetcher.submit({}, { method: 'POST' })
+  console.log(orders)
+
   const rows = orders?.edges.map(({ node }) => [
     node.id.replace(
       'gid://shopify/Order/',
       '',
     ),
     new Date(node.updatedAt).toLocaleDateString('en-GB'),
-    node.customer.firstName,
+    node.customer?.firstName,
     node.lineItems.edges[0].node.variant.product.id.replace('gid://shopify/Product/', ''),
     node.lineItems.edges[0].node.variant.product.title,
     node.lineItems.edges[0].node.quantity,
-  ]).filter(row => row[3] == '10050191753562') || []
+  ]) || []
 
   // const [value, setValue] = useState('10050191753562')
   // const handleChange = useCallback(
