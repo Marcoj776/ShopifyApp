@@ -44,6 +44,9 @@ export default defineConfig({
 			// See https://vitejs.dev/config/server-options.html#server-fs-allow for more information
 			allow: ['app', 'node_modules'],
 		},
+		allowedHosts: [
+			'https://cd90-2a00-23c7-ec3e-8501-61f1-22a3-c257-db25.ngrok-free.app',
+		],
 	},
 	plugins: [
 		remix({
