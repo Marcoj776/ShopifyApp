@@ -14,4 +14,19 @@ That should build the app
 
 Then grant access to products and customer scopes
 
-5) to trigger the webhook, go to a product in the inventory, and update any of a product's data
+## Question 1
+1) Discount a product via the "compare at price"
+
+2) visit the product's page in the online store
+
+## Question 2
+1) go to my app's page
+
+2) click the "fetch" button and the data will appear in the table
+
+## Question 3
+1) go to a product in teh inventory
+
+2) edit some of the data
+
+3) the PRODUCT_UPDATE data should appear in your terminal
