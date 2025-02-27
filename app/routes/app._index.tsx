@@ -179,6 +179,7 @@ export default function Index() {
                           <b>Use Default Data</b>: Choose one of the default
                           product IDs from your development store to filter
                           orders. (10050191753562)
+                          (I have removed the filter of the product id as I cannot predict what ids will be in your store)
                         </Text>
                       </List.Item>
                       <List.Item>
