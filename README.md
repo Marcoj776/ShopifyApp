@@ -20,7 +20,7 @@ Then grant access to products and customer scopes
 2) visit the product's page in the online store
 
 ## Question 2
-1) go to my app's page
+1) go to my app's page - I have filtered the results for product id: 10050191753562 (in reality this would be set by an input field)
 
 2) click the "fetch" button and the data will appear in the table
 
